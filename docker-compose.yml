@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"
+
+  webserver:
+    image: wordpress
+    ports:
+      - "8008:80"
+    links:
+      - dbserver
+
+  dbserver:
+    image: mariadb
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+
+  temserver:
+    image: nginx
+    ports:
+      - "8888:80"
+    volumes:
+      - /root/composetest/pentwist:/usr/share/nginx/html
